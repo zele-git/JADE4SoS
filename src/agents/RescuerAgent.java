@@ -18,7 +18,7 @@ public class RescuerAgent extends Agent {
     ScenarioConfig sconfig = new ScenarioConfig();
 
     private AID[] collAgent;
-    float BLEVEL = (float) sconfig.getRA_BELONGING_VALUE();
+    float BLEVEL = (float) sconfig.getLobRA();
 
     Random r = new Random();
     double initcon;
@@ -32,8 +32,6 @@ public class RescuerAgent extends Agent {
     ServiceDescription template_sd = new ServiceDescription();
     ACLMessage inform;
     String cntrl = "";
-    double v = 0.5;
-    double vprime = 0.75;
     float blevel;
     int step = 0;
     int app_count = 0;
@@ -170,10 +168,10 @@ public class RescuerAgent extends Agent {
                                     if (completedtask == 0 && flg) {
                                         cntrl = "APPROVE";
                                         flg = false;
-                                    } else if ((kvalue < (float) v * mean && kprimevalue > v * v * sconfig.getGoal_value(rqstring.get(0).trim())) ||
-                                            (kvalue <= (float) vprime * mean && kvalue >= (float) v * mean && kprimevalue > v * v * sconfig.getGoal_value(rqstring.get(0).trim()) && BLEVEL > vprime * sconfig.getBELONGING_HIGHER_REANGE()) ||
-                                            (kvalue <= (float) vprime * mean && kvalue >= (float) v * mean && BLEVEL <= vprime * sconfig.getBELONGING_HIGHER_REANGE() && BLEVEL >= v * sconfig.getBELONGING_HIGHER_REANGE() && kprimevalue > v * sconfig.getGoal_value(rqstring.get(0).trim())) ||
-                                            (kprimevalue <= v * sconfig.getGoal_value(rqstring.get(0).trim()) && kprimevalue >= v * v * sconfig.getGoal_value(rqstring.get(0).trim()) && kvalue > (float) vprime * mean && BLEVEL > vprime * sconfig.getBELONGING_HIGHER_REANGE())) {
+                                    } else if ((kvalue < (float) sconfig.getV() * mean && kprimevalue > sconfig.getV() * sconfig.getV() * sconfig.getGoal_value(rqstring.get(0).trim())) ||
+                                            (kvalue <= (float) sconfig.getVprime() * mean && kvalue >= (float) sconfig.getV() * mean && kprimevalue > sconfig.getV() * sconfig.getV() * sconfig.getGoal_value(rqstring.get(0).trim()) && BLEVEL > sconfig.getVprime() * sconfig.getLobCommand()) ||
+                                            (kvalue <= (float) sconfig.getVprime() * mean && kvalue >= (float) sconfig.getV() * mean && BLEVEL <= sconfig.getVprime() * sconfig.getLobCommand() && BLEVEL >= sconfig.getV() * sconfig.getLobCommand() && kprimevalue > sconfig.getV() * sconfig.getGoal_value(rqstring.get(0).trim())) ||
+                                            (kprimevalue <= sconfig.getV() * sconfig.getGoal_value(rqstring.get(0).trim()) && kprimevalue >= sconfig.getV() * sconfig.getV() * sconfig.getGoal_value(rqstring.get(0).trim()) && kvalue > (float) sconfig.getVprime() * mean && BLEVEL > sconfig.getVprime() * sconfig.getLobCommand())) {
                                         cntrl = "APPROVE";
                                     } else {
                                         cntrl = "NOT";
@@ -183,7 +181,7 @@ public class RescuerAgent extends Agent {
                                         if (initcon >= con && initrec >= rec) {
                                             decision.add("APPROVE");
                                             cntrl = "APPROVE";
-                                            if (blevel >= vprime * sconfig.getBELONGING_HIGHER_REANGE()) {
+                                            if (blevel >= sconfig.getVprime() * sconfig.getLobCommand()) {
                                                 boolean var = false;
                                                 for (int k = 0; k < flipvalues.size(); k++) {
                                                     String[] str = flipvalues.get(k).split(",");
@@ -204,9 +202,9 @@ public class RescuerAgent extends Agent {
                                                 }
 //                                            } else if (blevel < v * sconfig.getBELONGING_HIGHER_REANGE()) {
 
-                                            } else if (blevel <  sconfig.getBELONGING_HIGHER_REANGE()) {
+                                            } else if (blevel <  sconfig.getLobCommand()) {
                                                 if (r.nextDouble() > 0.6)//60% chance
-                                                    if (blevel < sconfig.getBELONGING_HIGHER_REANGE())
+                                                    if (blevel < sconfig.getLobCommand())
                                                         blevel += 0.1;
                                             }
                                         } else if (initcon >= con || initrec >= rec) {
